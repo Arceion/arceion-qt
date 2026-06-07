@@ -1,0 +1,8 @@
+include README.md
+include LICENSE
+include .editorconfig
+include pyproject.toml
+recursive-include arceion/qt/res *
+recursive-exclude arceion/qt/__pycache__ *
+recursive-exclude arceion/qt *.pyc
+recursive-exclude arceion/qt *.pyo
