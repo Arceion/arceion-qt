@@ -3,3 +3,4 @@
 /.ruff_cache
 /.demo
 /arceion_qt.egg-info
+**/__pycache__/**
