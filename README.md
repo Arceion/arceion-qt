@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="arceion/qt/static/img/Arceion Logo 1024X1024 Transparent Round.png" alt="Arceion Logo" width="200"/>
+  <img src="https://raw.githubusercontent.com/Arceion/arceion-qt/refs/heads/dev/arceion/qt/static/img/Arceion%20Logo%201024X1024%20Transparent%20Round.png" alt="Arceion Logo" width="200"/>
 </p>
 
 <h1 align="center">Arceion Qt</h1>
