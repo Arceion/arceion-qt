@@ -2,7 +2,7 @@ from datetime import datetime
 
 from .ModelAbstract import ModelAbstract
 
-__all__ = ['Model']
+__all__ = ["Model"]
 
 
 class Model(ModelAbstract):

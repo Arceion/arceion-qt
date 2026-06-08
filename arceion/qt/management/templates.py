@@ -3,22 +3,22 @@ Template strings for project scaffolding
 """
 
 __all__ = [
-    'MAIN_PY',
-    'APP_PY',
-    'ENV_PY',
-    'PYPROJECT_TOML',
-    'THEME_ENUM',
-    'LOCALE_ENUM',
-    'APP_THEME',
-    'HOME_VIEW',
-    'LOCALE_EN_US',
-    'LOCALE_SI_LK',
-    'ENUMS_INIT',
-    'VIEWS_INIT',
-    'RES_INIT',
+    "MAIN_PY",
+    "APP_PY",
+    "ENV_PY",
+    "PYPROJECT_TOML",
+    "THEME_ENUM",
+    "LOCALE_ENUM",
+    "APP_THEME",
+    "HOME_VIEW",
+    "LOCALE_EN_US",
+    "LOCALE_SI_LK",
+    "ENUMS_INIT",
+    "VIEWS_INIT",
+    "RES_INIT",
 ]
 
-MAIN_PY = '''import faulthandler
+MAIN_PY = """import faulthandler
 import logging
 import os
 import sys
@@ -54,9 +54,9 @@ if __name__ == '__main__':
 \tfrom {app_class} import {app_class}
 \t{app_class}()
 \tsys.exit(app.exec())
-'''
+"""
 
-APP_PY = '''from PyQt6.QtCore import Qt
+APP_PY = """from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon, QPalette
 
 from enums import Theme
@@ -96,9 +96,9 @@ class {app_class}(Window):
 \t\t\tself.showNormal()
 \t\telse:
 \t\t\tself.showFullScreen()
-'''
+"""
 
-ENV_PY = '''from arceion.qt.env import Env, EnvManager, EnvMode
+ENV_PY = """from arceion.qt.env import Env, EnvManager, EnvMode
 
 __all__ = ['env']
 
@@ -112,9 +112,9 @@ env = EnvManager([
 \t\tverbose=False
 \t)
 ], default=EnvMode.DEBUG)
-'''
+"""
 
-PYPROJECT_TOML = '''[project]
+PYPROJECT_TOML = """[project]
 name = "{project_name}"
 version = "0.1.0"
 description = "Add your description here"
@@ -124,9 +124,9 @@ dependencies = [
 \t"arceion-qt",
 \t"pyqt6>=6.11.0",
 ]
-'''
+"""
 
-THEME_ENUM = '''from enum import Enum
+THEME_ENUM = """from enum import Enum
 
 __all__ = ['Theme']
 
@@ -134,9 +134,9 @@ __all__ = ['Theme']
 class Theme(Enum):
 \tLIGHT = 'light'
 \tDARK = 'dark'
-'''
+"""
 
-LOCALE_ENUM = '''from enum import Enum
+LOCALE_ENUM = """from enum import Enum
 
 __all__= ['Locale']
 
@@ -144,9 +144,9 @@ __all__= ['Locale']
 class Locale(Enum):
 \tenUS = 'English (United States)'
 \tsiLK = 'Sinhala (Sri Lanka)'
-'''
+"""
 
-APP_THEME = '''from arceion.qt.res import Theme as ThemeMeta, ColorTheme, Images, LocaleBuilder
+APP_THEME = """from arceion.qt.res import Theme as ThemeMeta, ColorTheme, Images, LocaleBuilder
 from enums import Theme, Locale
 
 __all__ = ['AppTheme']
@@ -184,7 +184,7 @@ class AppTheme(ThemeMeta):
 \t)
 
 \tlocale = LocaleBuilder(locale= Locale.enUS, default=Locale.enUS)
-'''
+"""
 
 HOME_VIEW = '''from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QFrame, QScrollArea, QWidget
@@ -460,7 +460,7 @@ class HomeView(View):
 \t\treturn super().onDestroy()
 '''
 
-LOCALE_EN_US = '''{
+LOCALE_EN_US = """{
   "welcome_title": "The application worked successfully!",
   "welcome_subtitle": "Congratulations on your first Arceion Qt application.",
   "getting_started_title": "Getting Started",
@@ -482,9 +482,9 @@ LOCALE_EN_US = '''{
   "quick_links_title": "Quick Links",
   "footer_text": "You're seeing this message because you haven't customized the HomeView yet."
 }
-'''
+"""
 
-LOCALE_SI_LK = '''{
+LOCALE_SI_LK = """{
   "welcome_title": "යෙදුම සාර්ථකව ක්‍රියා විය!",
   "welcome_subtitle": "ඔබේ පළමු Arceion Qt යෙදුම සඳහා සුභ පැතුම්.",
   "getting_started_title": "ආරම්භ කිරීම",
@@ -506,20 +506,20 @@ LOCALE_SI_LK = '''{
   "quick_links_title": "ඉක්මන් සබැඳි",
   "footer_text": "ඔබ තවමත් HomeView අභිරුචිකරණය කර නොමැති නිසා මෙම පණිවිඩය දිස්වේ."
 }
-'''
+"""
 
-ENUMS_INIT = '''from .Theme import Theme
+ENUMS_INIT = """from .Theme import Theme
 from .Locale import Locale
 
 __all__ = ['Theme', 'Locale']
-'''
+"""
 
-VIEWS_INIT = '''from .HomeView import HomeView
+VIEWS_INIT = """from .HomeView import HomeView
 
 __all__ = ['HomeView']
-'''
+"""
 
-RES_INIT = '''from .AppTheme import AppTheme
+RES_INIT = """from .AppTheme import AppTheme
 
 __all__ = ['AppTheme']
-'''
+"""

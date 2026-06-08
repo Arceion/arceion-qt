@@ -1,0 +1,191 @@
+name: Feature Request
+description: Propose a new feature or enhancement for Arceion Qt
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a feature! Please fill out the sections below to help us understand your proposal.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm the following before submitting
+      options:
+        - label: I have searched existing issues to ensure this feature hasn't been requested
+          required: true
+        - label: I have reviewed the [documentation](https://github.com/Arceion/arceion-qt/wiki)
+          required: true
+        - label: This feature aligns with the project's scope and goals
+          required: false
+
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? Why is it needed?
+      placeholder: |
+        Describe the problem or limitation you're experiencing.
+        Examples:
+        - "Currently, there's no way to customize the navigation animation between views"
+        - "The Icon system doesn't support custom icon sets"
+        - "Users need to write boilerplate code for common form validation"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: How do you envision this feature working?
+      placeholder: |
+        Describe your proposed solution in detail.
+        - What should the API/interface look like?
+        - How should it behave?
+        - Any specific implementation ideas?
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical-approach
+    attributes:
+      label: Technical Approach
+      description: Optional technical details about how this could be implemented
+      placeholder: |
+        If you have thoughts on implementation:
+        - Which modules/classes would be affected?
+        - Any dependencies or libraries needed?
+        - Architectural considerations?
+        - Performance implications?
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered other solutions or workarounds?
+      placeholder: |
+        Describe alternative approaches you've considered:
+        - Other design patterns
+        - Existing workarounds you're using
+        - Why those alternatives are insufficient
+    validations:
+      required: false
+
+  - type: dropdown
+    id: breaking-changes
+    attributes:
+      label: Breaking Changes
+      description: Would this feature introduce breaking changes to the existing API?
+      options:
+        - "No breaking changes"
+        - "Minor breaking changes (can be mitigated)"
+        - "Major breaking changes (requires migration)"
+        - "Unknown"
+    validations:
+      required: true
+
+  - type: textarea
+    id: breaking-details
+    attributes:
+      label: Breaking Change Details
+      description: If this introduces breaking changes, explain what would break and how to migrate
+      placeholder: |
+        If breaking changes are involved:
+        - What existing functionality would change?
+        - How should users migrate their code?
+        - Can backwards compatibility be maintained?
+    validations:
+      required: false
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List any new dependencies or changes to existing ones
+      placeholder: |
+        Examples:
+        - New PyPI packages required
+        - Minimum Python version changes
+        - PyQt6 version requirements
+        - OS-specific dependencies
+    validations:
+      required: false
+
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: Use Cases
+      description: Provide specific examples of how this feature would be used
+      placeholder: |
+        Example code snippets showing how the feature would be used:
+        
+        ```python
+        # Example usage
+        window = Window()
+        window.setNavigationAnimation(SlideAnimation(duration=300))
+        ```
+    validations:
+      required: false
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component/Module
+      description: Which part of Arceion Qt does this feature relate to?
+      options:
+        - "Core (Window/View)"
+        - "API Controller"
+        - "Database/ORM"
+        - "Resources (Icons/Themes)"
+        - "Threading (ThreadPool/Worker)"
+        - "Utilities"
+        - "Contrib/Widgets"
+        - "Documentation"
+        - "Other"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - "Low - Nice to have"
+        - "Medium - Would improve workflow"
+        - "High - Blocking current work"
+        - "Critical - Essential for project"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Are you willing to contribute to this feature?
+      options:
+        - label: I'm willing to submit a PR for this feature
+          required: false
+        - label: I can help with testing/feedback
+          required: false
+        - label: I can help with documentation
+          required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other information, screenshots, or references
+      placeholder: |
+        - Links to similar features in other frameworks
+        - Screenshots or mockups
+        - Related issues or discussions
+        - Any other relevant information
+    validations:
+      required: false

@@ -1,6 +1,6 @@
 from .ModelAbstract import ModelAbstract
 
-__all__ = ['ModelRequest']
+__all__ = ["ModelRequest"]
 
 
 class ModelRequest(ModelAbstract):

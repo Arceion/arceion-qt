@@ -3,7 +3,7 @@ from typing import Any
 
 import requests
 
-__all__ = ['Result']
+__all__ = ["Result"]
 
 
 @dataclasses.dataclass
@@ -35,7 +35,7 @@ class Result:
     message: str | None = None
     error: dict | None = None
 
-    def getErrorMessage(self, default: str = ''):
+    def getErrorMessage(self, default: str = ""):
         if isinstance(self.error, list) and len(self.error) > 0 and isinstance(self.error[0], str):
             return self.error[0]
-        return self.error.get('details', default)
+        return self.error.get("details", default)

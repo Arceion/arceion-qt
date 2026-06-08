@@ -1,9 +1,9 @@
 name: Tests
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [main, dev, prod]
   pull_request:
-    branches: [ main, master, develop ]
+    branches: [main, dev, prod]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -33,18 +33,28 @@ jobs:
     - name: Lint with ruff
       run: |
         ruff check arceion/
-      continue-on-error: true
-
-    - name: Type check with mypy
-      run: |
-        mypy arceion/ --ignore-missing-imports
-      continue-on-error: true
 
     - name: Run tests with pytest
       run: |
         # Use xvfb-run for PyQt6 tests
-        xvfb-run -a pytest arceion/ --cov=arceion --cov-report=xml -v
-      continue-on-error: true
+        if [ ! -d "tests" ]; then
+          echo "No tests directory found. Skipping tests."
+          exit 0
+        fi
+
+        set +e
+
+        xvfb-run -a pytest --cov=arceion --cov-report=xml -v
+
+        EXIT_CODE=$?
+
+        # Exit code 5 = no tests collected
+        if [ $EXIT_CODE -eq 5 ]; then
+          echo "No tests found. Skipping."
+          exit 0
+        fi
+
+        exit $EXIT_CODE
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4

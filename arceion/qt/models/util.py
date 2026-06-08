@@ -1,5 +1,4 @@
-
-__all__ = ['getAllAnnotations']
+__all__ = ["getAllAnnotations"]
 
 
 def getAllAnnotations(cls: type) -> dict[str, type]:
@@ -22,6 +21,6 @@ def getAllAnnotations(cls: type) -> dict[str, type]:
 
     annotations = {}
     for base in cls.__mro__:
-        if hasattr(base, '__annotations__'):
+        if hasattr(base, "__annotations__"):
             annotations.update(base.__annotations__)
     return annotations

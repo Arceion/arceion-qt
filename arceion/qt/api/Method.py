@@ -2,7 +2,7 @@ import enum
 
 import requests
 
-__all__ = ['Method']
+__all__ = ["Method"]
 
 
 class Method(enum.Enum):
@@ -31,10 +31,10 @@ class Method(enum.Enum):
             `requests.options` method for performing HTTP OPTIONS requests.
     """
 
-    GET = ('GET', requests.get)
-    POST = ('POST', requests.post)
-    PUT = ('PUT', requests.put)
-    DELETE = ('DELETE', requests.delete)
-    PATCH = ('PATCH', requests.patch)
-    HEAD = ('HEAD', requests.head)
-    OPTIONS = ('OPTIONS', requests.options)
+    GET = ("GET", requests.get)
+    POST = ("POST", requests.post)
+    PUT = ("PUT", requests.put)
+    DELETE = ("DELETE", requests.delete)
+    PATCH = ("PATCH", requests.patch)
+    HEAD = ("HEAD", requests.head)
+    OPTIONS = ("OPTIONS", requests.options)

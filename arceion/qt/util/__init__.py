@@ -4,4 +4,4 @@ from .StyleSheet import StyleSheet
 from .UI import UI
 from .Util import Util
 
-__all__ = ['UI', 'Settings', 'Style', 'StyleSheet', 'Util']
+__all__ = ["UI", "Settings", "Style", "StyleSheet", "Util"]

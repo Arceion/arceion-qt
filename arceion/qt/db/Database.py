@@ -2,7 +2,7 @@ from sqlalchemy import Engine, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import DeclarativeMeta, Session, sessionmaker
 
-__all__ = ['Database']
+__all__ = ["Database"]
 
 
 class Database:
@@ -35,7 +35,7 @@ class Database:
         """
 
         self.db_name = db_name
-        self.engine = create_engine('sqlite:///' + self.db_name, echo_pool=True)
+        self.engine = create_engine("sqlite:///" + self.db_name, echo_pool=True)
         self.Model = declarative_base()
         self.session = sessionmaker(bind=self.engine)()
 
