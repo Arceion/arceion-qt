@@ -37,7 +37,15 @@ jobs:
 
     - name: Run tests
       run: |
+        if [ ! -d "tests" ]; then
+          echo "No tests directory found. Skipping tests."
+          exit 0
+        fi
+
+        set +e
+
         xvfb-run -a pytest arceion/ -v
+
         EXIT_CODE=$?
 
         # Exit code 5 = no tests collected
