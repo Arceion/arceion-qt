@@ -37,7 +37,15 @@ jobs:
     - name: Run tests with pytest
       run: |
         # Use xvfb-run for PyQt6 tests
+        if [ ! -d "tests" ]; then
+          echo "No tests directory found. Skipping tests."
+          exit 0
+        fi
+
+        set +e
+
         xvfb-run -a pytest --cov=arceion --cov-report=xml -v
+
         EXIT_CODE=$?
 
         # Exit code 5 = no tests collected
@@ -45,7 +53,7 @@ jobs:
           echo "No tests found. Skipping."
           exit 0
         fi
-    
+
         exit $EXIT_CODE
 
     - name: Upload coverage to Codecov
