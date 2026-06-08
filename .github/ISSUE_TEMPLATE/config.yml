@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or Discussion
+    url: https://github.com/Arceion/arceion-qt/discussions
+    about: Ask questions or discuss ideas with the community
+  - name: Documentation
+    url: https://github.com/Arceion/arceion-qt/wiki
+    about: Read the project documentation and guides
+  - name: Security Vulnerability
+    url: https://github.com/Arceion/arceion-qt/security/advisories/new
+    about: Report a security vulnerability privately

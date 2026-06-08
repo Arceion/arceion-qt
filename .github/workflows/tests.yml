@@ -1,9 +1,9 @@
 name: Tests
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [main, dev, prod]
   pull_request:
-    branches: [ main, master, develop ]
+    branches: [main, dev, prod]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -33,18 +33,11 @@ jobs:
     - name: Lint with ruff
       run: |
         ruff check arceion/
-      continue-on-error: true
-
-    - name: Type check with mypy
-      run: |
-        mypy arceion/ --ignore-missing-imports
-      continue-on-error: true
 
     - name: Run tests with pytest
       run: |
         # Use xvfb-run for PyQt6 tests
-        xvfb-run -a pytest arceion/ --cov=arceion --cov-report=xml -v
-      continue-on-error: true
+        xvfb-run -a pytest --cov=arceion --cov-report=xml -v
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
