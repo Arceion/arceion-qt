@@ -7,7 +7,7 @@ from arceion.qt.logger import Logger
 
 from .Worker import Worker
 
-__all__ = ['ThreadPool']
+__all__ = ["ThreadPool"]
 
 
 class ThreadPoolManager:
@@ -143,7 +143,7 @@ class ThreadPoolManager:
         try:
             for func_id, runnable in list(self._tasks.items()):
                 runnable.stop()
-                if hasattr(self.threadPool, 'cancel'):
+                if hasattr(self.threadPool, "cancel"):
                     self.threadPool.cancel(runnable)
                 del self._tasks[func_id]
         except RuntimeError as e:

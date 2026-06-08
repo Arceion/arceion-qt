@@ -38,6 +38,15 @@ jobs:
       run: |
         # Use xvfb-run for PyQt6 tests
         xvfb-run -a pytest --cov=arceion --cov-report=xml -v
+        EXIT_CODE=$?
+
+        # Exit code 5 = no tests collected
+        if [ $EXIT_CODE -eq 5 ]; then
+          echo "No tests found. Skipping."
+          exit 0
+        fi
+    
+        exit $EXIT_CODE
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4

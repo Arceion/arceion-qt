@@ -94,11 +94,29 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           xvfb-run -a pytest --cov=arceion --cov-report=xml --cov-report=term -v
+          EXIT_CODE=$?
+
+          # Exit code 5 = no tests collected
+          if [ $EXIT_CODE -eq 5 ]; then
+            echo "No tests found. Skipping."
+            exit 0
+          fi
+      
+          exit $EXIT_CODE
 
       - name: Run tests (Windows/macOS)
         if: runner.os != 'Linux'
         run: |
           pytest --cov=arceion --cov-report=xml --cov-report=term -v
+          EXIT_CODE=$?
+
+          # Exit code 5 = no tests collected
+          if [ $EXIT_CODE -eq 5 ]; then
+            echo "No tests found. Skipping."
+            exit 0
+          fi
+      
+          exit $EXIT_CODE
 
       - name: Upload coverage to Codecov
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'

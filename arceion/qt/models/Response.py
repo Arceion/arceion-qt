@@ -1,6 +1,6 @@
 from .ModelAbstract import ModelAbstract
 
-__all__ = ['Response']
+__all__ = ["Response"]
 
 
 class Response(ModelAbstract):

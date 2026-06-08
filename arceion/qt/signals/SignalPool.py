@@ -1,6 +1,6 @@
 from PyQt6.QtCore import QObject
 
-__all__ = ['SignalPool']
+__all__ = ["SignalPool"]
 
 
 class SignalPool(QObject):

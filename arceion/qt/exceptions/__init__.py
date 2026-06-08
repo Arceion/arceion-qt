@@ -1,3 +1,3 @@
 from .ParseError import ParseError
 
-__all__ = ['ParseError']
+__all__ = ["ParseError"]

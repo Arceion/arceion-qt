@@ -1,6 +1,6 @@
 from .ModelAbstract import ModelAbstract
 
-__all__ = ['DataModel']
+__all__ = ["DataModel"]
 
 
 class DataModel(ModelAbstract):

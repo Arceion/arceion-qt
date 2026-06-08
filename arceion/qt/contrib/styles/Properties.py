@@ -1,12 +1,15 @@
 from arceion.qt.util import Style
 
-__all__ = ['bg', 'bgPrimary', 'bgTransparent']
+__all__ = ["bg", "bgPrimary", "bgTransparent"]
 
-bg = Style("""
+bg = Style(
+    """
 QWidget [
 	background-color: {bgColor};
 ]
-""", **dict(bgColor='transparent'))
+""",
+    **dict(bgColor="transparent"),
+)
 
-bgPrimary = bg.update(**dict(bgColor='#242424'))
-bgTransparent = bg.update(**dict(bgColor='transparent'))
+bgPrimary = bg.update(**dict(bgColor="#242424"))
+bgTransparent = bg.update(**dict(bgColor="transparent"))

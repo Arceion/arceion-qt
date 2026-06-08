@@ -2,7 +2,7 @@ from PyQt6.QtCore import pyqtSignal
 
 from .SignalPool import SignalPool
 
-__all__ = ['WinSigPool']
+__all__ = ["WinSigPool"]
 
 
 class WindowSignalPoolManager(SignalPool):
