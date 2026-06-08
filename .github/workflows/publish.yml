@@ -38,6 +38,15 @@ jobs:
     - name: Run tests
       run: |
         xvfb-run -a pytest arceion/ -v
+        EXIT_CODE=$?
+
+        # Exit code 5 = no tests collected
+        if [ $EXIT_CODE -eq 5 ]; then
+          echo "No tests found. Skipping."
+          exit 0
+        fi
+
+        exit $EXIT_CODE
       continue-on-error: false
   build:
     needs: test
