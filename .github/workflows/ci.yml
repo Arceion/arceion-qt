@@ -92,8 +92,21 @@ jobs:
 
       - name: Run tests (Linux)
         if: runner.os == 'Linux'
+        shell: bash
         run: |
-          xvfb-run -a pytest --cov=arceion --cov-report=xml --cov-report=term -v
+          if [ ! -d "tests" ]; then
+            echo "No tests directory found. Skipping tests."
+            exit 0
+          fi
+
+          set +e
+
+          xvfb-run -a python -m pytest \
+            --cov=arceion \
+            --cov-report=xml \
+            --cov-report=term \
+            -v
+
           EXIT_CODE=$?
 
           # Exit code 5 = no tests collected
@@ -101,7 +114,7 @@ jobs:
             echo "No tests found. Skipping."
             exit 0
           fi
-      
+
           exit $EXIT_CODE
 
       - name: Run tests (Windows/macOS)
