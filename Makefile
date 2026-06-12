@@ -9,3 +9,7 @@ lint:
 .PHONY: test
 test:
 	uv run pytest -v
+
+.PHONY: format
+format:
+	uv  run ruff format --check arceion/
