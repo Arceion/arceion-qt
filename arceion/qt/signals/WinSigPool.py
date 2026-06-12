@@ -6,8 +6,9 @@ __all__ = ["WinSigPool"]
 
 
 class WindowSignalPoolManager(SignalPool):
-    newViewAdded = pyqtSignal(object)
-    tabRemoved = pyqtSignal(object)
+	newViewAdded = pyqtSignal(object)
+	tabRemoved = pyqtSignal(object)
+	themeChanged = pyqtSignal()
 
 
 WinSigPool = WindowSignalPoolManager()

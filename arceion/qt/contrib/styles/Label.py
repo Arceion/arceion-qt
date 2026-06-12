@@ -15,6 +15,7 @@ QLabel [
 	font-size: {fontSize}px;
 	text-align: {textAlign};
 	font-weight: {fontWeight};
+	opacity: {opacity};
 ]
 """,
     **dict(
@@ -26,6 +27,7 @@ QLabel [
         padding=Padding(0).qss,
         radius=0,
         fontWeight=FontWeight.Normal,
+		opacity=1,
     ),
 )
 

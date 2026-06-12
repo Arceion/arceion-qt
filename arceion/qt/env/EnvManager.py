@@ -1,3 +1,7 @@
+import logging
+
+from arceion.qt.logger import Logger
+
 from .Env import Env
 from .EnvMode import EnvMode
 
@@ -29,8 +33,7 @@ class EnvManager:
 
     _env = None
 
-    @classmethod
-    def set_env(cls, env: Env):
+    def set_env(self, env: Env):
         """
         Sets the environment for the class.
 
@@ -41,10 +44,10 @@ class EnvManager:
             env (Env): The environment object to be set for the class.
         """
 
-        cls._env = env
+        self._env = env
+        Logger.setLevel(logging.DEBUG if self.current_env.debug else logging.INFO)
 
-    @classmethod
-    def get_env(cls) -> Env:
+    def get_env(self) -> Env:
         """
         Retrieves the environment configuration set for the application.
 
@@ -56,16 +59,15 @@ class EnvManager:
             Env: The environment configuration associated with the class.
         """
 
-        if cls._env is None:
+        if self._env is None:
             raise ValueError("Environment not set")
-        return cls._env
+        return self._env
 
-    @classmethod
-    def get(cls, key: str):
+    def get(self, key: str):
         """
         Fetches the value associated with the provided key from the environment configuration.
 
-        This class method retrieves a value by its key from the environment configuration
+        This method retrieves a value by its key from the environment configuration
         using the `get` method of the class's environment object.
 
         Args:
@@ -76,7 +78,7 @@ class EnvManager:
             If the key does not exist, returns `None`.
         """
 
-        return cls.get_env().get(key)
+        return self.current_env.get(key)
 
     def __init__(self, envs: list[Env] | None = None, default=EnvMode.DEBUG):
         """
@@ -102,6 +104,7 @@ class EnvManager:
         self.current_env = self.envs[default]
         self.set_env(self.current_env)
 
+    @property
     def current(self) -> Env:
         """
         Returns the current environment associated with the instance.

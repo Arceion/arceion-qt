@@ -87,7 +87,7 @@ class Border:
                 f"{self._borderColor.name(format=QColor.NameFormat.HexArgb)}"
             )
             if self._borderStyle != BorderStyle.NONE
-            else BorderStyle.NONE.name
+            else BorderStyle.NONE.value
         )
 
     def setColor(self, color: QColor):
