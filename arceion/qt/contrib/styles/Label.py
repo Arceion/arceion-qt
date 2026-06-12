@@ -27,7 +27,7 @@ QLabel [
         padding=Padding(0).qss,
         radius=0,
         fontWeight=FontWeight.Normal,
-		opacity=1,
+        opacity=1,
     ),
 )
 

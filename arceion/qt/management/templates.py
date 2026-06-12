@@ -20,7 +20,7 @@ __all__ = [
     "MODELS_INIT",
     "REQUESTS_INIT",
     "RESPONSES_INIT",
-    "SERVICES_INIT"
+    "SERVICES_INIT",
 ]
 
 MAIN_PY = """import faulthandler
