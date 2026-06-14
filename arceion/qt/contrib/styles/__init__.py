@@ -1,1 +1,1 @@
-__all__ = ["Button", "Common", "Properties", "Label", "Card"]
+__all__ = ["Button", "Common", "Properties", "Label", "Card", "CheckBox"]
