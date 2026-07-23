@@ -1,5 +1,5 @@
+from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.util import UI, Style
-from arceion.qt.contrib.widgets.Attr import  Padding
 
 __all__ = ["defaultDatePicker"]
 defaultDatePicker = Style(

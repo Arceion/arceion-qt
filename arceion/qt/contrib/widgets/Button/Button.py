@@ -1,12 +1,12 @@
-from typing import Callable, Optional
+from collections.abc import Callable
 
-from PyQt6.QtCore import QRectF, QSize, QTimer, QUrl, Qt
+from PyQt6.QtCore import QRectF, QSize, Qt, QTimer, QUrl
 from PyQt6.QtGui import QColor, QDesktopServices, QIcon, QPainter, QPen
 from PyQt6.QtWidgets import QSizePolicy, QToolButton
 
-from arceion.qt.util import UI, Style
 from arceion.qt.contrib.styles.Button import defaultButton
 from arceion.qt.contrib.widgets.Attr import Padding
+from arceion.qt.util import UI, Style
 
 __all__ = ["Button"]
 
@@ -27,20 +27,20 @@ class Button(QToolButton):
     - Hyperlink-style buttons via the `Button.asLink(...)` constructor.
     """
 
-    _onPressCallback: Optional[Callable] = None
+    _onPressCallback: Callable | None = None
     _styleSheet: str = defaultButton.qss
 
     def __init__(
         self,
         text: str = "",
         tooltip: str = "",
-        icon: Optional[QIcon] = None,
-        iconSize: Optional[QSize] = None,
-        padding: Optional[Padding] = None,
+        icon: QIcon | None = None,
+        iconSize: QSize | None = None,
+        padding: Padding | None = None,
         style: str | Style = defaultButton,
         toolButtonStyle: Qt.ToolButtonStyle = Qt.ToolButtonStyle.ToolButtonTextOnly,
         direction: Qt.LayoutDirection = Qt.LayoutDirection.LeftToRight,
-        onClick: Optional[Callable] = None,
+        onClick: Callable | None = None,
     ):
         """
         Initialize the Button widget.
@@ -116,7 +116,7 @@ class Button(QToolButton):
         """
         self._applyStyle(style)
 
-    def setRounded(self, rounded: bool = True, radius: Optional[int] = None) -> None:
+    def setRounded(self, rounded: bool = True, radius: int | None = None) -> None:
         """
         Toggle a fully pill-shaped border radius (shadcn's `rounded-full`).
 
@@ -201,7 +201,7 @@ class Button(QToolButton):
         self._tooltip = tooltip
         super().setToolTip(tooltip)
 
-    def setIcon(self, icon: QIcon, iconSize: Optional[QSize] = None) -> None:
+    def setIcon(self, icon: QIcon, iconSize: QSize | None = None) -> None:
         """
         Set the button icon and optional icon size.
 
@@ -261,7 +261,7 @@ class Button(QToolButton):
 
     # -- loading spinner -------------------------------------------------
 
-    def setLoading(self, loading: bool, spinnerColor: Optional[str] = None) -> None:
+    def setLoading(self, loading: bool, spinnerColor: str | None = None) -> None:
         """
         Show/hide a spinning loading indicator in place of the button's
         text, and disable interaction while loading.
@@ -333,9 +333,9 @@ class Button(QToolButton):
         text: str,
         url: str,
         tooltip: str = "",
-        style: Optional[str | Style] = None,
+        style: str | Style | None = None,
         direction: Qt.LayoutDirection = Qt.LayoutDirection.LeftToRight,
-        onClick: Optional[Callable] = None,
+        onClick: Callable | None = None,
     ) -> "Button":
         """
         Convenience constructor for a Button that behaves like a

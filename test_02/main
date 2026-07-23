@@ -8,6 +8,9 @@ from arceion.qt.contrib.enums import FontWeight
 from arceion.qt.contrib.styles.Label import label
 from arceion.qt.contrib.widgets.Attr import Margin
 from arceion.qt.contrib.widgets.DatePicker import DatePicker
+from arceion.qt.contrib.widgets.DatePicker.DateRangePicker import DateRangePicker
+from arceion.qt.contrib.widgets.DatePicker.DateInput import DateInput
+
 
 
 class HomeView(View):
@@ -57,6 +60,17 @@ class HomeView(View):
         self.pickerPlaceholder = DatePicker(
             placeholder='Choose your birthday',
         )
+        # --- Range Picker ---
+        self.rangeLabel = QLabel('# Date Range Picker')
+        self.rangeLabel.setStyleSheet(label.update(
+            fontSize=UI.sp(16),
+            fontWeight=FontWeight.SemiBold,
+        ).qss)
+        self.rangePicker = DateRangePicker()
+        
+        self.inputLabel = QLabel('# Date Input')
+        self.inputLabel.setStyleSheet(label.update(fontSize=UI.sp(16), fontWeight=FontWeight.SemiBold).qss)
+        self.dateInput = DateInput()
 
         # add to layout
         self.mainLayout.addWidget(self.defaultLabel)
@@ -67,7 +81,11 @@ class HomeView(View):
         self.mainLayout.addWidget(self.pickerCustomFormat, alignment=Qt.AlignmentFlag.AlignLeft)
         self.mainLayout.addWidget(self.placeholderLabel)
         self.mainLayout.addWidget(self.pickerPlaceholder, alignment=Qt.AlignmentFlag.AlignLeft)
+        self.mainLayout.addWidget(self.rangeLabel)
+        self.mainLayout.addWidget(self.inputLabel)
+        self.mainLayout.addWidget(self.dateInput, alignment=Qt.AlignmentFlag.AlignLeft)
 
+        self.mainLayout.addWidget(self.rangePicker, alignment=Qt.AlignmentFlag.AlignLeft)
         self.setLayout(self.mainLayout)
 
     def onCreate(self) -> None:
@@ -83,7 +101,12 @@ class HomeView(View):
         self.pickerPlaceholder.onDateChanged(
             lambda date: print(f"[Placeholder] Selected: {date.toString('yyyy-MM-dd')}")
         )
-
+        self.rangePicker.onRangeChanged(
+            lambda start, end: print(f"Range: {start.toString('yyyy-MM-dd')} to {end.toString('yyyy-MM-dd')}")
+        )
+        self.dateInput.onDateChanged(
+            lambda date: print(f"[Input] Selected: {date.toString('yyyy-MM-dd')}")
+        )
     def onResume(self) -> None:
         pass
 
