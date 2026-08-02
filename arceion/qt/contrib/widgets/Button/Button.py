@@ -133,9 +133,7 @@ class Button(QToolButton):
             None
         """
         if self._appliedStyle is None:
-            raise TypeError(
-                "setRounded requires the button's style to be a Style object, not a raw QSS string"
-            )
+            raise TypeError("setRounded requires the button's style to be a Style object, not a raw QSS string")
         newRadius = UI.dp(9999) if rounded else (radius if radius is not None else UI.dp(6))
         self._appliedStyle = self._appliedStyle.update(radius=newRadius)
         self._styleSheet = self._appliedStyle.qss
@@ -354,7 +352,6 @@ class Button(QToolButton):
             Button: A configured, link-styled Button instance.
         """
         from arceion.qt.contrib.styles.Button import linkButton
-
 
         def _handleClick():
             QDesktopServices.openUrl(QUrl(url))

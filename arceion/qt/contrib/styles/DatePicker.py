@@ -32,9 +32,9 @@ QCalendarWidget QToolButton [
         border="1px solid #27272A",
         radius=UI.dp(6),
         padding=Padding(UI.dp(8)).qss,
-        color="#FAFAFA",           # text color — hint: same as defaultButton
-        selectedColor="#27272A",   # selected date bg — hint: use a zinc highlight
+        color="#FAFAFA",  # text color — hint: same as defaultButton
+        selectedColor="#27272A",  # selected date bg — hint: use a zinc highlight
         selectedTextColor="#FAFAFA",
-        hoverColor="#27272A",      # same as defaultButton's hoverColor
-    )
+        hoverColor="#27272A",  # same as defaultButton's hoverColor
+    ),
 )

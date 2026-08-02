@@ -10,6 +10,7 @@ from arceion.qt.util import Style
 
 __all__ = ["DateRangePicker"]
 
+
 class DateRangePicker(QWidget):
     """
     A date-range picker widget that lets the user choose a start and end date.
@@ -76,9 +77,7 @@ class DateRangePicker(QWidget):
         # Build the popup calendar container used for range selection.
         self._popup = QFrame(self, Qt.WindowType.Popup)
         popupLayout = QVBoxLayout(self._popup)
-        self._popup.setStyleSheet(
-            self._style if isinstance(self._style, str) else self._style.qss
-        )
+        self._popup.setStyleSheet(self._style if isinstance(self._style, str) else self._style.qss)
         self._calendar = QCalendarWidget()
         self._calendar.clicked.connect(self._onDateSelected)
         popupLayout.addWidget(self._calendar)
@@ -97,9 +96,7 @@ class DateRangePicker(QWidget):
             None
         """
         if self._start and self._end:
-            self._button.setText(
-                f"{self._start.toString(self._dateFormat)} - {self._end.toString(self._dateFormat)}"
-            )
+            self._button.setText(f"{self._start.toString(self._dateFormat)} - {self._end.toString(self._dateFormat)}")
         elif self._start:
             self._button.setText(f"{self._start.toString(self._dateFormat)} - ...")
         else:

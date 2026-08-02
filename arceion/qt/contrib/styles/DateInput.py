@@ -23,5 +23,5 @@ QLineEdit [
         backgroundColor="#18181B",
         color="#FAFAFA",
         inputPadding=Padding(UI.dp(4), UI.dp(8)).qss,
-    )
+    ),
 )

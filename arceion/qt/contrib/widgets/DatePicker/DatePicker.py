@@ -10,6 +10,7 @@ from arceion.qt.util import Style
 
 __all__ = ["DatePicker"]
 
+
 class DatePicker(QWidget):
     """
     A compact date picker widget with a button trigger and a calendar popup.
@@ -75,9 +76,7 @@ class DatePicker(QWidget):
         # Build the popup calendar container used for date selection.
         self._popup = QFrame(self, Qt.WindowType.Popup)
         popupLayout = QVBoxLayout(self._popup)
-        self._popup.setStyleSheet(
-            self._style if isinstance(self._style, str) else self._style.qss
-        )
+        self._popup.setStyleSheet(self._style if isinstance(self._style, str) else self._style.qss)
         self._calendar = QCalendarWidget()
         self._calendar.clicked.connect(self._onDateSelected)
         popupLayout.addWidget(self._calendar)

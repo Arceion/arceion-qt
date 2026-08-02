@@ -89,9 +89,7 @@ class DateInput(QWidget):
         # input field and the calendar button, matching shadcn's
         # InputGroup pattern where the border wraps the whole group
         self._container = QFrame()
-        self._container.setStyleSheet(
-            self._style if isinstance(self._style, str) else self._style.qss
-        )
+        self._container.setStyleSheet(self._style if isinstance(self._style, str) else self._style.qss)
         containerLayout = QHBoxLayout(self._container)
         containerLayout.setContentsMargins(0, 0, 0, 0)
         containerLayout.setSpacing(0)
@@ -123,9 +121,7 @@ class DateInput(QWidget):
         # matching shadcn's Popover dismiss behavior
         self._popup = QFrame(self, Qt.WindowType.Popup)
         popupLayout = QVBoxLayout(self._popup)
-        self._popup.setStyleSheet(
-            self._style if isinstance(self._style, str) else self._style.qss
-        )
+        self._popup.setStyleSheet(self._style if isinstance(self._style, str) else self._style.qss)
         self._calendar = QCalendarWidget()
         self._calendar.clicked.connect(self._onDateSelected)
         popupLayout.addWidget(self._calendar)
@@ -202,9 +198,7 @@ class DateInput(QWidget):
             self._popup.hide()
         else:
             # align popup to right edge of the calendar button
-            buttonBottomRight = self._button.mapToGlobal(
-                QPoint(self._button.width(), self._button.height())
-            )
+            buttonBottomRight = self._button.mapToGlobal(QPoint(self._button.width(), self._button.height()))
             self._popup.adjustSize()
             pos = QPoint(
                 buttonBottomRight.x() - self._popup.width(),
