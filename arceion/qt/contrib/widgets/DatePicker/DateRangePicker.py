@@ -1,17 +1,18 @@
 from collections.abc import Callable
 
 from PyQt6.QtCore import QDate, QPoint, Qt
-from PyQt6.QtWidgets import QCalendarWidget, QFrame, QHBoxLayout, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 
 from arceion.qt.contrib.styles.DatePicker import defaultDatePicker
 from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.contrib.widgets.Button import Button
-from arceion.qt.util import Style
+from arceion.qt.contrib.widgets.CalendarGrid import CalendarGrid
+from arceion.qt.util import Style,UI
 
 __all__ = ["DateRangePicker"]
 
 
-class DateRangePicker(QWidget):
+class DateRangePicker(QFrame):
     """
     A date-range picker widget that lets the user choose a start and end date.
 
@@ -31,6 +32,8 @@ class DateRangePicker(QWidget):
         end: QDate | None = None,
         placeholder: str = "Pick a date range",
         dateFormat: str = "MMM d, yyyy",
+        width: int =240,
+        height: int =40,
         padding: Padding | None = None,
         style: str | Style = defaultDatePicker,
         direction: Qt.LayoutDirection = Qt.LayoutDirection.LeftToRight,
@@ -56,6 +59,8 @@ class DateRangePicker(QWidget):
         super().__init__()
 
         # Store the widget state so the selected range can be updated later.
+        self._height= height
+        self._width = width
         self._start = start
         self._end = end
         self._placeholder = placeholder
@@ -64,6 +69,9 @@ class DateRangePicker(QWidget):
         self._style = style
         self._direction = direction
         self._pickingStart: bool = True
+
+        self.setObjectName("DateRangePicker")
+        self.setFrameShape(QFrame.Shape.NoFrame)
 
         # Create the trigger button that opens and closes the popup.
         layout = QHBoxLayout(self)
@@ -76,11 +84,17 @@ class DateRangePicker(QWidget):
 
         # Build the popup calendar container used for range selection.
         self._popup = QFrame(self, Qt.WindowType.Popup)
-        popupLayout = QVBoxLayout(self._popup)
+        self._popup.setObjectName("DateRangePopup")
         self._popup.setStyleSheet(self._style if isinstance(self._style, str) else self._style.qss)
-        self._calendar = QCalendarWidget()
-        self._calendar.clicked.connect(self._onDateSelected)
+        self.setFixedSize(UI.dp(self._width),UI.dp(self._height))
+        popupLayout = QVBoxLayout(self._popup)
+        popupLayout.setContentsMargins(0, 0, 0, 0)
+
+        self._calendar = CalendarGrid(selectionMode="range", parent=self._popup)
+        self._calendar.dateSelected.connect(self._onDateSelected)
         popupLayout.addWidget(self._calendar)
+        if self._start is not None:
+            self._calendar.setRange(self._start, self._end)
 
         # Hide the popup until the user opens it.
         self._popup.hide()
@@ -118,13 +132,17 @@ class DateRangePicker(QWidget):
             self._popup.move(pos)
             self._popup.adjustSize()
             self._popup.show()
+            self._popup.raise_()
+            self._calendar.setFocus()
 
     def _onDateSelected(self, date: QDate) -> None:
         """
         Handle a date selection from the popup calendar.
 
         The first selection sets the start date, and the second selection
-        completes the range and closes the popup.
+        completes the range and closes the popup. Picking a date before the
+        current start restarts the range from that earlier date instead of
+        producing an inverted (end-before-start) range.
 
         Args:
             date (QDate): The date selected by the user.
@@ -132,17 +150,25 @@ class DateRangePicker(QWidget):
         Returns:
             None
         """
-        if self._pickingStart:
+        if self._pickingStart or self._start is None:
             self._start = date
             self._end = None
             self._pickingStart = False
+        elif date < self._start:
+            # Clicked an earlier date than the current start — restart the
+            # range from here rather than producing start > end.
+            self._start = date
+            self._end = None
         else:
             self._end = date
             self._pickingStart = True
-            self._popup.hide()
-            if self._onRangeChangedCallback:
-                self._onRangeChangedCallback(self._start, self._end)
+
+        self._calendar.setRange(self._start, self._end)
         self._updateDisplay()
+
+        if self._start is not None and self._end is not None and self._onRangeChangedCallback:
+            self._onRangeChangedCallback(self._start, self._end)
+            self._popup.hide()
 
     def setRange(self, start: QDate, end: QDate) -> None:
         """
@@ -157,8 +183,9 @@ class DateRangePicker(QWidget):
         """
         self._start = start
         self._end = end
+        self._pickingStart = True
         self._updateDisplay()
-        self._calendar.setSelectedDate(start)
+        self._calendar.setRange(start, end)
 
     def clearRange(self) -> None:
         """
@@ -171,6 +198,7 @@ class DateRangePicker(QWidget):
         self._end = None
         self._pickingStart = True
         self._updateDisplay()
+        self._calendar.setRange(None, None)
 
     def selectedRange(self) -> tuple[QDate | None, QDate | None]:
         """

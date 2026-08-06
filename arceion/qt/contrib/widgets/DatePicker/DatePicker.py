@@ -1,23 +1,27 @@
 from collections.abc import Callable
 
 from PyQt6.QtCore import QDate, QPoint, Qt
-from PyQt6.QtWidgets import QCalendarWidget, QFrame, QHBoxLayout, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 
+from arceion.qt.contrib.styles.Button import outlineButton
 from arceion.qt.contrib.styles.DatePicker import defaultDatePicker
 from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.contrib.widgets.Button import Button
-from arceion.qt.util import Style
+from arceion.qt.contrib.widgets.CalendarGrid import CalendarGrid
+from arceion.qt.util import Style, UI
 
 __all__ = ["DatePicker"]
 
 
-class DatePicker(QWidget):
+class DatePicker(QFrame):
     """
-    A compact date picker widget with a button trigger and a calendar popup.
+    A button-triggered date picker, matching shadcn's basic DatePicker:
+    a single button showing the selected date (or a placeholder) that
+    opens a calendar popup on click. No text entry — use DateInput for
+    typed date entry with format validation.
 
     Supports:
-    - Selecting a single date from a popup calendar.
-    - Displaying the selected date with a custom format string.
+    - Selecting a date from a popup calendar.
     - Programmatic set, clear, and read operations.
     - Optional callback notification when the selected date changes.
     - Custom placeholder text and styling.
@@ -30,151 +34,128 @@ class DatePicker(QWidget):
         date: QDate | None = None,
         tooltip: str = "",
         placeholder: str = "Pick a date",
-        dateFormat: str = "MMM d,yyyy",
+        dateFormat: str = "MMMM dd, yyyy",
+        width: int = 240,
+        height: int = 40,
         padding: Padding | None = None,
         style: str | Style = defaultDatePicker,
         direction: Qt.LayoutDirection = Qt.LayoutDirection.LeftToRight,
         onDateChanged: Callable[[QDate], None] | None = None,
     ):
-        """
-        Initialize the DatePicker widget.
-
-        Args:
-            date (QDate | None): Initial date shown by the widget.
-            tooltip (str): Tooltip text for the trigger button.
-            placeholder (str): Text shown when no date is selected.
-            dateFormat (str): Format used to display the selected date.
-            padding (Padding | None): Optional padding data stored on the widget.
-            style (str | Style): Style or QSS string used by the popup.
-            direction (Qt.LayoutDirection): Layout direction of the picker.
-            onDateChanged (Callable[[QDate], None] | None): Callback fired when
-                the selected date changes.
-
-        Returns:
-            None
-        """
         super().__init__()
 
-        # Store the widget state so it can be updated later.
         self._date = date
         self._tooltip = tooltip
         self._placeholder = placeholder
         self._dateFormat = dateFormat
+        self._width = width
+        self._height = height
         self._padding = padding
         self._style = style
         self._direction = direction
 
-        # Create the trigger button that opens and closes the popup.
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        self._button = Button(
-            text=self._placeholder,
-            onClick=self._togglePopup,
-        )
-        layout.addWidget(self._button)
+        self._buildUi()
+        self._applyInitialDate()
 
-        # Build the popup calendar container used for date selection.
-        self._popup = QFrame(self, Qt.WindowType.Popup)
-        popupLayout = QVBoxLayout(self._popup)
-        self._popup.setStyleSheet(self._style if isinstance(self._style, str) else self._style.qss)
-        self._calendar = QCalendarWidget()
-        self._calendar.clicked.connect(self._onDateSelected)
-        popupLayout.addWidget(self._calendar)
-
-        # Hide the popup until the user opens it.
-        self._popup.hide()
-        self._updateDisplay()
         if onDateChanged:
             self.onDateChanged(onDateChanged)
 
+    def _buildUi(self) -> None:
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        self.setObjectName("DatePicker")
+        self.setFrameShape(QFrame.Shape.NoFrame)
+        self.setLayoutDirection(self._direction)
+        self.setFixedSize(UI.dp(self._width), UI.dp(self._height))
+
+        # outline variant already gives us the bordered box — no need for a
+        # separate DatePickerTrigger QSS rule or a wrapping QFrame.
+        self._button = Button(
+            text="\U0001F5D3  " + self._placeholder,
+            tooltip=self._tooltip or "Open calendar",
+            style=outlineButton,
+            onClick=self._togglePopup,
+        )
+        self._button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self._button.setLayoutDirection(self._direction)
+        self._button.setFixedSize(UI.dp(self._width), UI.dp(self._height))
+        layout.addWidget(self._button)
+
+        self._popup = QFrame(self, Qt.WindowType.Popup)
+        self._popup.setObjectName("DatePickerPopup")
+        self._popup.setStyleSheet(self._style if isinstance(self._style, str) else self._style.qss)
+        popupLayout = QVBoxLayout(self._popup)
+        popupLayout.setContentsMargins(0, 0, 0, 0)
+
+        self._calendar = CalendarGrid(selectedDate=self._date, parent=self._popup)
+        self._calendar.dateSelected.connect(self._onDateSelected)
+        popupLayout.addWidget(self._calendar)
+        self._popup.hide()
+
+        if self._padding is not None:
+            layout.setContentsMargins(
+                self._padding.left,
+                self._padding.top,
+                self._padding.right,
+                self._padding.bottom,
+            )
+
+    def _applyInitialDate(self) -> None:
+        if self._date is not None:
+            self._calendar.setSelectedDate(self._date)
+            self._updateDisplay()
+        else:
+            # Scroll to the current month WITHOUT marking today as selected —
+            # setSelectedDate would render today as a filled pill even though
+            # nothing has actually been chosen yet.
+            self._calendar.setViewDate(QDate.currentDate())
+
     def _updateDisplay(self) -> None:
-        """
-        Refresh the button text so it reflects the current date state.
-
-        Returns:
-            None
-        """
-        if self._date:
-            self._button.setText(self._date.toString(self._dateFormat))
+        if self._date is not None:
+            self._button.setText("\U0001F5D3  " + self._date.toString(self._dateFormat))
         else:
-            self._button.setText(self._placeholder)
-
-    def _togglePopup(self) -> None:
-        """
-        Show or hide the calendar popup.
-
-        Positions the popup directly below the trigger button.
-
-        Returns:
-            None
-        """
-        if self._popup.isVisible():
-            self._popup.hide()
-        else:
-            pos = self._button.mapToGlobal(QPoint(0, self._button.height()))
-            self._popup.move(pos)
-            self._popup.adjustSize()
-            self._popup.show()
+            self._button.setText("\U0001F5D3  " + self._placeholder)
 
     def _onDateSelected(self, date: QDate) -> None:
-        """
-        Handle a date selection from the popup calendar.
+        if self._date is not None and date == self._date:
+            self.clearDate()
+            self._popup.hide()
+            return
 
-        Args:
-            date (QDate): The date selected by the user.
-
-        Returns:
-            None
-        """
-        self._date = date
-        self._updateDisplay()
+        self._setDate(date, notify=True)
         self._popup.hide()
-        if self._onDateChangedCallback:
+
+    def _togglePopup(self) -> None:
+        if self._popup.isVisible():
+            self._popup.hide()
+            return
+
+        pos = self._button.mapToGlobal(QPoint(0, self._button.height()))
+        self._popup.move(pos)
+        self._popup.adjustSize()
+        self._popup.show()
+        self._popup.raise_()
+        self._calendar.setFocus()
+
+    def _setDate(self, date: QDate, notify: bool = False) -> None:
+        self._date = date
+        self._calendar.setSelectedDate(date)
+        self._updateDisplay()
+        if notify and self._onDateChangedCallback is not None:
             self._onDateChangedCallback(date)
 
     def setDate(self, date: QDate) -> None:
-        """
-        Programmatically set the selected date.
-
-        Args:
-            date (QDate): The date to display and store.
-
-        Returns:
-            None
-        """
-        self._date = date
-        self._updateDisplay()
-        self._calendar.setSelectedDate(date)
+        self._setDate(date, notify=True)
 
     def clearDate(self) -> None:
-        """
-        Clear the selected date and reset the calendar state.
-
-        Returns:
-            None
-        """
         self._date = None
         self._updateDisplay()
-        self._calendar.setSelectedDate(QDate.currentDate())
+        self._calendar.setViewDate(QDate.currentDate())
 
     def selectedDate(self) -> QDate | None:
-        """
-        Return the currently selected date.
-
-        Returns:
-            QDate | None: The selected date, or None if nothing is set.
-        """
         return self._date
 
     def onDateChanged(self, action: Callable[[QDate], None]) -> None:
-        """
-        Set or replace the callback invoked when the date changes.
-
-        Args:
-            action (Callable[[QDate], None]): Function called after a date is
-                selected or updated.
-
-        Returns:
-            None
-        """
         self._onDateChangedCallback = action
