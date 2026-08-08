@@ -9,7 +9,7 @@ from arceion.qt.contrib.styles.DateInput import defaultDateInput
 from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.contrib.widgets.Button import Button
 from arceion.qt.contrib.widgets.CalendarGrid import CalendarGrid
-from arceion.qt.util import Style, UI
+from arceion.qt.util import UI, Style
 
 __all__ = ["DateInput"]
 
@@ -134,7 +134,7 @@ class DateInput(QFrame):
         )
         # Sized to fit the inset space (container height minus the top+bottom
         # border insets above), not the full container height.
-        self._button.setFixedSize(UI.dp(self._height) - 4* _borderWidth, UI.dp(self._height) - 4* _borderWidth)
+        self._button.setFixedSize(UI.dp(self._height) - 4 * _borderWidth, UI.dp(self._height) - 4 * _borderWidth)
 
         # ghostButton's border-radius (see Button.py) is uniform on all
         # four corners, but this button sits flush against the right edge

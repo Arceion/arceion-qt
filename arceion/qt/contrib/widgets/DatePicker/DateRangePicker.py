@@ -7,7 +7,7 @@ from arceion.qt.contrib.styles.DatePicker import defaultDatePicker
 from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.contrib.widgets.Button import Button
 from arceion.qt.contrib.widgets.CalendarGrid import CalendarGrid
-from arceion.qt.util import Style,UI
+from arceion.qt.util import UI, Style
 
 __all__ = ["DateRangePicker"]
 
@@ -32,8 +32,8 @@ class DateRangePicker(QFrame):
         end: QDate | None = None,
         placeholder: str = "Pick a date range",
         dateFormat: str = "MMM d, yyyy",
-        width: int =240,
-        height: int =40,
+        width: int = 240,
+        height: int = 40,
         padding: Padding | None = None,
         style: str | Style = defaultDatePicker,
         direction: Qt.LayoutDirection = Qt.LayoutDirection.LeftToRight,
@@ -59,7 +59,7 @@ class DateRangePicker(QFrame):
         super().__init__()
 
         # Store the widget state so the selected range can be updated later.
-        self._height= height
+        self._height = height
         self._width = width
         self._start = start
         self._end = end
@@ -86,7 +86,7 @@ class DateRangePicker(QFrame):
         self._popup = QFrame(self, Qt.WindowType.Popup)
         self._popup.setObjectName("DateRangePopup")
         self._popup.setStyleSheet(self._style if isinstance(self._style, str) else self._style.qss)
-        self.setFixedSize(UI.dp(self._width),UI.dp(self._height))
+        self.setFixedSize(UI.dp(self._width), UI.dp(self._height))
         popupLayout = QVBoxLayout(self._popup)
         popupLayout.setContentsMargins(0, 0, 0, 0)
 

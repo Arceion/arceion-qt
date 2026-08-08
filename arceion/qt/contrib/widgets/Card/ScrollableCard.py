@@ -110,7 +110,7 @@ class ScrollableCard(QFrame):
                 for the scroll area.
         """
 
-        self.scrollArea.setStyleSheet(styleSheet)
+        self.scrollArea.setStyleSheet(styleSheet if isinstance(styleSheet, str) else styleSheet.qss)
 
     def setScrollAreaLayout(self, layout):
         """

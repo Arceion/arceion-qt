@@ -88,7 +88,7 @@ QPushButton#DatePickerTrigger:focus [
         selectedColor="#FAFAFA",
         selectedTextColor="#171717",
         hoverColor="#27272A",
-        buttonColor="#A1A1AA" ,
+        buttonColor="#A1A1AA",
         buttonPadding=Padding(UI.dp(4), UI.dp(6)).qss,
         buttonRadius=UI.dp(6),
         focusColor="#2563EB",

@@ -3,5 +3,5 @@
 /.ruff_cache
 /arceion_qt.egg-info
 **/__pycache__/**
-/test
 *.pyc
+.coverage
