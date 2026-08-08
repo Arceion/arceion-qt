@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QPushButton, QVBox
 
 from arceion.qt.contrib.styles.CalendarGrid import defaultCalendarGrid
 from arceion.qt.contrib.widgets.Button import Button
-from arceion.qt.util import Style, UI
+from arceion.qt.util import UI, Style
 
 __all__ = ["CalendarGrid", "DayCell"]
 
@@ -161,7 +161,9 @@ class CalendarGrid(QWidget):
                 cellDate = QDate(cursor)
                 cell = DayCell(cellDate.day(), cellDate, self)
 
-                isCurrentMonth = cellDate.month() == self._viewMonth.month() and cellDate.year() == self._viewMonth.year()
+                isCurrentMonth = (
+                    cellDate.month() == self._viewMonth.month() and cellDate.year() == self._viewMonth.year()
+                )
                 isToday = cellDate == today
                 isDisabled = self._isDateOutOfRange(cellDate) or (
                     self._isDateDisabled is not None and self._isDateDisabled(cellDate)

@@ -2,9 +2,9 @@ from arceion.qt.contrib.enums import BorderStyle, FontWeight
 from arceion.qt.contrib.widgets.Attr import Border, Padding
 from arceion.qt.util import UI, Style
 
-__all__ = ["label", "successBg", "errorBg", "transparentBg"]
+__all__ = ["defaultLabel", "successBgLabel", "errorBgLabel", "transparentBgLabel"]
 
-label = Style(
+defaultLabel = Style(
     """
 QLabel [
 	background-color: {backgroundColor};
@@ -29,8 +29,8 @@ QLabel [
     ),
 )
 
-successBg = label.update(**dict(backgroundColor="#4CAF50", color="#FFFFFF"))
+successBgLabel = defaultLabel.update(**dict(backgroundColor="#4CAF50", color="#FFFFFF"))
 
-errorBg = label.update(**dict(backgroundColor="#F44336", color="#FFFFFF"))
+errorBgLabel = defaultLabel.update(**dict(backgroundColor="#F44336", color="#FFFFFF"))
 
-transparentBg = label.update(**dict(backgroundColor="transparent", color="black"))
+transparentBgLabel = defaultLabel.update(**dict(backgroundColor="transparent", color="black"))

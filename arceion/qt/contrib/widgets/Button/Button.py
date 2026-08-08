@@ -4,7 +4,8 @@ from PyQt6.QtCore import QRectF, QSize, Qt, QTimer, QUrl
 from PyQt6.QtGui import QColor, QDesktopServices, QIcon, QPainter, QPen
 from PyQt6.QtWidgets import QSizePolicy, QToolButton
 
-from arceion.qt.contrib.styles.Button import defaultButton
+from arceion.qt.contrib.enums import Size
+from arceion.qt.contrib.styles.Button import defaultButton, linkButton
 from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.util import UI, Style
 
@@ -41,26 +42,29 @@ class Button(QToolButton):
         toolButtonStyle: Qt.ToolButtonStyle = Qt.ToolButtonStyle.ToolButtonTextOnly,
         direction: Qt.LayoutDirection = Qt.LayoutDirection.LeftToRight,
         onClick: Callable | None = None,
+        size: Size | None = None,
+        spaceBetween: int = 1,
     ):
         """
         Initialize the Button widget.
 
         Args:
-            text (str): Text displayed on the button. Leave empty (with an
-                icon set) for an auto-sized, square icon-only button.
-            tooltip (str): Tooltip text shown when hovering.
-            icon (QIcon | None): Optional icon for the button.
-            iconSize (QSize | None): Size of the icon. Defaults to 16dp.
-            padding (Padding | None): Padding around the button content.
-            style (str | Style): Style object or raw QSS string applied to the button.
-                Pass a Style object (not a raw string) if you plan to call setRounded().
-            toolButtonStyle (Qt.ToolButtonStyle): Layout style for text/icon. Overridden
-                to IconOnly automatically for icon-only buttons.
-            direction (Qt.LayoutDirection): Layout direction (LTR or RTL).
-            onClick (Callable | None): Callback executed when the button is clicked.
+                text (str): Text displayed on the button. Leave empty (with an
+                        icon set) for an auto-sized, square icon-only button.
+                tooltip (str): Tooltip text shown when hovering.
+                icon (QIcon | None): Optional icon for the button.
+                iconSize (QSize | None): Size of the icon. Defaults to 16dp.
+                padding (Padding | None): Padding around the button content.
+                style (str | Style): Style object or raw QSS string applied to the button.
+                        Pass a Style object (not a raw string) if you plan to call setRounded().
+                toolButtonStyle (Qt.ToolButtonStyle): Layout style for text/icon. Overridden
+                        to IconOnly automatically for icon-only buttons.
+                direction (Qt.LayoutDirection): Layout direction (LTR or RTL).
+                onClick (Callable | None): Callback executed when the button is clicked.
+                size (int | None): Optional fixed height.
 
         Returns:
-            None
+                None
         """
         super().__init__()
 
@@ -71,6 +75,9 @@ class Button(QToolButton):
         self._padding = padding if padding else Padding(0)
         self._direction = direction
         self._toolButtonStyle = toolButtonStyle
+        self._size = size
+        self._style = style
+        self._spaceBetween = spaceBetween
 
         # loading spinner state
         self._loading = False
@@ -80,20 +87,58 @@ class Button(QToolButton):
         self._spinnerTimer = QTimer(self)
         self._spinnerTimer.timeout.connect(self._rotateSpinner)
 
-        self._applyStyle(style)
-
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         self.setContentsMargins(self._padding)
 
         self.setToolButtonStyle(toolButtonStyle)
         self.setLayoutDirection(direction)
+
+        self.updateSize()
+        self._applyStyle(self._style)
         self.updateTextAndIcon()
 
         if onClick:
             self.onClick(onClick)
 
-    # -- style ---------------------------------------------------------
+    def updateSize(self):
+        iconOnly = not self._text and self._icon
+        if self._size == Size.ExtraSmall:
+            self._iconSize = UI.size(24, 24)
+            if iconOnly:
+                self.setFixedSize(self._iconSize)
+                self._style = self._style.update(padding=Padding(0).qss)
+            if not iconOnly:
+                if self._toolButtonStyle != Qt.ToolButtonStyle.ToolButtonTextUnderIcon:
+                    self.setFixedHeight(UI.dp(24))
+                self._style = self._style.update(padding=Padding(UI.dp(6), UI.dp(0)).qss, fontSize=UI.dp(10))
+        if self._size == Size.Small:
+            self._iconSize = UI.size(28, 28)
+            if iconOnly:
+                self.setFixedSize(self._iconSize)
+                self._style = self._style.update(padding=Padding(0).qss)
+            if not iconOnly:
+                if self._toolButtonStyle != Qt.ToolButtonStyle.ToolButtonTextUnderIcon:
+                    self.setFixedHeight(UI.dp(28))
+                self._style = self._style.update(padding=Padding(UI.dp(7), UI.dp(0)).qss, fontSize=UI.dp(12))
+        if self._size == Size.Default:
+            self._iconSize = UI.size(32, 32)
+            if iconOnly:
+                self.setFixedSize(self._iconSize)
+                self._style = self._style.update(padding=Padding(0).qss)
+            if not iconOnly:
+                if self._toolButtonStyle != Qt.ToolButtonStyle.ToolButtonTextUnderIcon:
+                    self.setFixedHeight(UI.dp(32))
+                self._style = self._style.update(padding=Padding(UI.dp(8), UI.dp(2)).qss, fontSize=UI.dp(14))
+        if self._size == Size.Large:
+            self._iconSize = UI.size(36, 36)
+            if iconOnly:
+                self.setFixedSize(self._iconSize)
+                self._style = self._style.update(padding=Padding(0).qss)
+            if not iconOnly:
+                if self._toolButtonStyle != Qt.ToolButtonStyle.ToolButtonTextUnderIcon:
+                    self.setFixedHeight(UI.dp(36))
+                self._style = self._style.update(padding=Padding(UI.dp(10), UI.dp(4)).qss, fontSize=UI.dp(14))
 
     def _applyStyle(self, style: str | Style) -> None:
         """
@@ -109,12 +154,14 @@ class Button(QToolButton):
         Apply a new QSS style.
 
         Args:
-            style (str | Style): Style object or raw QSS string.
+                style (str | Style): Style object or raw QSS string.
 
         Returns:
-            None
+                None
         """
-        self._applyStyle(style)
+        self._style = style
+        self.updateSize()
+        self._applyStyle(self._style)
 
     def setRounded(self, rounded: bool = True, radius: int | None = None) -> None:
         """
@@ -125,21 +172,19 @@ class Button(QToolButton):
         `pill()` helper in ShadcnButtonStyles for a one-shot equivalent.
 
         Args:
-            rounded (bool): Whether to apply the pill radius.
-            radius (int | None): Explicit radius to fall back to when
-                `rounded=False`. Defaults to 6dp.
+                rounded (bool): Whether to apply the pill radius.
+                radius (int | None): Explicit radius to fall back to when
+                        `rounded=False`. Defaults to 6dp.
 
         Returns:
-            None
+                None
         """
         if self._appliedStyle is None:
             raise TypeError("setRounded requires the button's style to be a Style object, not a raw QSS string")
         newRadius = UI.dp(9999) if rounded else (radius if radius is not None else UI.dp(6))
-        self._appliedStyle = self._appliedStyle.update(radius=newRadius)
+        self._appliedStyle = self._appliedStyle.update(borderRadius=newRadius)
         self._styleSheet = self._appliedStyle.qss
         self.setStyleSheet(self._styleSheet)
-
-    # -- icon-only sizing ------------------------------------------------
 
     def updateTextAndIcon(self) -> None:
         """
@@ -147,7 +192,7 @@ class Button(QToolButton):
         icon-only buttons (no text, icon set) — enforce a square size.
 
         Returns:
-            None
+                None
         """
         if self._tooltip:
             super().setToolTip(self._tooltip)
@@ -158,30 +203,31 @@ class Button(QToolButton):
             super().setIcon(self._icon)
             super().setIconSize(self._iconSize)
         if self._text:
-            super().setText(self._text)
+            super().setText(
+                (
+                    " " * self._spaceBetween
+                    if self._icon and self._toolButtonStyle != Qt.ToolButtonStyle.ToolButtonTextUnderIcon
+                    else ""
+                )
+                + self._text
+            )
         else:
             super().setText("")
 
         if not self._text and self._icon:
-            # icon-only: force IconOnly layout + a square footprint
             super().setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
-            side = max(self._iconSize.width(), self._iconSize.height()) + self._padding.totalHorizontal()
-            self.setFixedSize(QSize(side, side))
         else:
             super().setToolButtonStyle(self._toolButtonStyle)
-            self.setMinimumSize(0, 0)
-            self.setMaximumSize(16777215, 16777215)
-            self.adjustSize()
 
     def setText(self, text: str) -> None:
         """
         Set the button text and update the UI.
 
         Args:
-            text (str): New text for the button.
+                text (str): New text for the button.
 
         Returns:
-            None
+                None
         """
         self._text = text
         self.updateTextAndIcon()
@@ -191,10 +237,10 @@ class Button(QToolButton):
         Set the button tooltip.
 
         Args:
-            tooltip (str): Tooltip text.
+                tooltip (str): Tooltip text.
 
         Returns:
-            None
+                None
         """
         self._tooltip = tooltip
         super().setToolTip(tooltip)
@@ -204,11 +250,11 @@ class Button(QToolButton):
         Set the button icon and optional icon size.
 
         Args:
-            icon (QIcon): Icon to display.
-            iconSize (QSize | None): Optional size for the icon.
+                icon (QIcon): Icon to display.
+                iconSize (QSize | None): Optional size for the icon.
 
         Returns:
-            None
+                None
         """
         self._icon = icon
         if iconSize:
@@ -220,10 +266,10 @@ class Button(QToolButton):
         Set the icon size.
 
         Args:
-            iconSize (QSize): New icon size.
+                iconSize (QSize): New icon size.
 
         Returns:
-            None
+                None
         """
         self._iconSize = iconSize
         self.updateTextAndIcon()
@@ -233,10 +279,10 @@ class Button(QToolButton):
         Set the padding for the button.
 
         Args:
-            padding (Padding): Padding object.
+                padding (Padding): Padding object.
 
         Returns:
-            None
+                None
         """
         self._padding = padding
         self.setContentsMargins(padding)
@@ -248,16 +294,14 @@ class Button(QToolButton):
         text alignment automatically via Qt's own RTL handling.
 
         Args:
-            direction (Qt.LayoutDirection): LTR or RTL.
+                direction (Qt.LayoutDirection): LTR or RTL.
 
         Returns:
-            None
+                None
         """
         self._direction = direction
         self.setLayoutDirection(direction)
         self.updateTextAndIcon()
-
-    # -- loading spinner -------------------------------------------------
 
     def setLoading(self, loading: bool, spinnerColor: str | None = None) -> None:
         """
@@ -265,12 +309,12 @@ class Button(QToolButton):
         text, and disable interaction while loading.
 
         Args:
-            loading (bool): Whether the button is in a loading state.
-            spinnerColor (str | None): Optional hex color for the spinner
-                (defaults to white, matching most filled variants).
+                loading (bool): Whether the button is in a loading state.
+                spinnerColor (str | None): Optional hex color for the spinner
+                        (defaults to white, matching most filled variants).
 
         Returns:
-            None
+                None
         """
         if loading == self._loading:
             return
@@ -289,6 +333,9 @@ class Button(QToolButton):
             self.setEnabled(True)
             self.setText(self._preLoadingText)
         self.update()
+
+    def toggleLoading(self, spinnerColor: str | None = None) -> None:
+        self.setLoading(not self._loading, spinnerColor)
 
     def isLoading(self) -> bool:
         """Returns whether the button is currently in its loading state."""
@@ -323,8 +370,6 @@ class Button(QToolButton):
         painter.drawArc(rect, self._spinnerAngle * 16, 270 * 16)
         painter.end()
 
-    # -- as-link -----------------------------------------------------
-
     @classmethod
     def asLink(
         cls,
@@ -341,17 +386,16 @@ class Button(QToolButton):
         opens `url` in the system's default browser when clicked.
 
         Args:
-            text (str): Link text.
-            url (str): URL to open on click.
-            tooltip (str): Optional tooltip.
-            style (str | Style | None): Overrides the default `linkButton` style.
-            direction (Qt.LayoutDirection): LTR or RTL.
-            onClick (Callable | None): Extra callback run alongside opening the URL.
+                text (str): Link text.
+                url (str): URL to open on click.
+                tooltip (str): Optional tooltip.
+                style (str | Style | None): Overrides the default `linkButton` style.
+                direction (Qt.LayoutDirection): LTR or RTL.
+                onClick (Callable | None): Extra callback run alongside opening the URL.
 
         Returns:
-            Button: A configured, link-styled Button instance.
+                Button: A configured, link-styled Button instance.
         """
-        from arceion.qt.contrib.styles.Button import linkButton
 
         def _handleClick():
             QDesktopServices.openUrl(QUrl(url))
@@ -366,17 +410,15 @@ class Button(QToolButton):
             onClick=_handleClick,
         )
 
-    # -- click/press plumbing --------------------------------------------
-
     def onClick(self, action: Callable) -> None:
         """
         Connect a click handler to the button.
 
         Args:
-            action (Callable): Function executed on click.
+                action (Callable): Function executed on click.
 
         Returns:
-            None
+                None
         """
         self.clicked.connect(action)
 
@@ -385,10 +427,10 @@ class Button(QToolButton):
         Connect a press handler to the button.
 
         Args:
-            action (Callable): Function executed on mouse press.
+                action (Callable): Function executed on mouse press.
 
         Returns:
-            None
+                None
         """
         self._onPressCallback = action
 
@@ -397,10 +439,10 @@ class Button(QToolButton):
         Handle mouse press events.
 
         Args:
-            event: Mouse event object.
+                event: Mouse event object.
 
         Returns:
-            None
+                None
         """
         if self._loading:
             return
@@ -414,7 +456,7 @@ class Button(QToolButton):
         Provide a custom size hint based on icon size and padding.
 
         Returns:
-            QSize: Suggested size for the button.
+                QSize: Suggested size for the button.
         """
         base_size = super().sizeHint()
         return QSize(

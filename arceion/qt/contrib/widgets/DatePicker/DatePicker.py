@@ -8,7 +8,7 @@ from arceion.qt.contrib.styles.DatePicker import defaultDatePicker
 from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.contrib.widgets.Button import Button
 from arceion.qt.contrib.widgets.CalendarGrid import CalendarGrid
-from arceion.qt.util import Style, UI
+from arceion.qt.util import UI, Style
 
 __all__ = ["DatePicker"]
 
@@ -73,7 +73,7 @@ class DatePicker(QFrame):
         # outline variant already gives us the bordered box — no need for a
         # separate DatePickerTrigger QSS rule or a wrapping QFrame.
         self._button = Button(
-            text="\U0001F5D3  " + self._placeholder,
+            text="\U0001f5d3  " + self._placeholder,
             tooltip=self._tooltip or "Open calendar",
             style=outlineButton,
             onClick=self._togglePopup,
@@ -114,9 +114,9 @@ class DatePicker(QFrame):
 
     def _updateDisplay(self) -> None:
         if self._date is not None:
-            self._button.setText("\U0001F5D3  " + self._date.toString(self._dateFormat))
+            self._button.setText("\U0001f5d3  " + self._date.toString(self._dateFormat))
         else:
-            self._button.setText("\U0001F5D3  " + self._placeholder)
+            self._button.setText("\U0001f5d3  " + self._placeholder)
 
     def _onDateSelected(self, date: QDate) -> None:
         if self._date is not None and date == self._date:

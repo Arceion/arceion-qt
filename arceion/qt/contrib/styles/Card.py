@@ -22,8 +22,20 @@ QFrame [
 defaultScrollArea = Style(
     """
 QScrollArea [
-	border: {border}
-	background: {backgroundColor};
+	border: {border};
+	background-color: {backgroundColor};
+]
+
+QScrollArea > QWidget > QWidget [
+    background-color: {backgroundColor};
+]
+
+QScrollArea QWidget [
+    background-color: {backgroundColor};
+]
+
+QScrollBar [
+    background-color: transparent;
 ]
 
 QScrollBar:vertical [
