@@ -3,18 +3,15 @@ from arceion.qt.contrib.widgets.Attr import Border, Margin, Padding
 from arceion.qt.util import UI, Style
 
 __all__ = [
-    "dangerButton",
-    "darkButton",
     "defaultButton",
-    "infoButton",
-    "lightButton",
-    "noButton",
-    "primaryButton",
+    "destructiveButton",
+    "outlineButton",
     "secondaryButton",
-    "successButton",
-    "transparentButton",
-    "warningButton",
+    "ghostButton",
+    "linkButton",
+    "pill",
 ]
+
 
 defaultButton = Style(
     """
@@ -29,103 +26,86 @@ QToolButton [
 	border-radius: {radius}px;
 	padding: {padding};
 	text-align: {textAlign};
+	text-decoration: {textDecoration};
 ]
 QToolButton:hover [
 	background-color: {hoverColor};
+	text-decoration: {hoverTextDecoration};
 ]
-
+QToolButton:disabled [
+	background-color: {disabledColor};
+	color: {disabledTextColor};
+]
 QToolButton::icon [
 	margin: {iconMargin};
-]"
+]
 """,
     **dict(
-        fontSize=UI.sp(12),
-        hoverColor="#C15532",
-        backgroundColor="#E95525",
-        color="white",
+        fontSize=UI.sp(14),
         fontWeight="500",
         fontFamily="'Inter'",
         margin=Margin(0).qss,
         iconMargin=Margin(0).qss,
-        radius=UI.dp(4),
-        padding=Padding(UI.dp(5)).qss,
+        radius=UI.dp(6),
+        padding=Padding(UI.dp(8)).qss,
         textAlign="center",
+        textDecoration="none",
+        hoverTextDecoration="none",
         border=Border(BorderStyle.NONE).qss,
+        backgroundColor="#18181B",
+        hoverColor="#27272A",
+        color="#FAFAFA",
+        disabledColor="#F4F4F5",
+        disabledTextColor="#A1A1AA",
     ),
 )
 
-primaryButton = defaultButton.update(
+destructiveButton = defaultButton.update(
     **dict(
-        backgroundColor="#E95525",
-        hoverColor="#C15532",
-        color="white",
+        backgroundColor="#EF4444",
+        hoverColor="#DC2626",
+        color="#FAFAFA",
     )
 )
 
 secondaryButton = defaultButton.update(
     **dict(
-        backgroundColor="#D9D9D9",
-        hoverColor="#BFBFBF",
-        color="#000000",
+        backgroundColor="#F4F4F5",
+        hoverColor="#E4E4E7",
+        color="#18181B",
     )
 )
 
-successButton = defaultButton.update(
+outlineButton = defaultButton.update(
     **dict(
-        backgroundColor="#13AE82",
-        hoverColor="#0F9E6A",
+        backgroundColor="#121111",
+        hoverColor="#252424",
+        color="#FFFFFF",
+        border="1px solid #545454"
     )
 )
 
-warningButton = defaultButton.update(
-    **dict(
-        backgroundColor="#FFCC00",
-        hoverColor="#FFB300",
-        color="#000000",
-    )
-)
-
-dangerButton = defaultButton.update(
-    **dict(
-        backgroundColor="#F44336",
-        hoverColor="#D32F2F",
-    )
-)
-
-infoButton = defaultButton.update(
-    **dict(
-        backgroundColor="#03A9F4",
-        hoverColor="#0288D1",
-    )
-)
-
-lightButton = defaultButton.update(
-    **dict(
-        backgroundColor="#F0F0F0",
-        hoverColor="#E5E5E5",
-        color="#333333",
-    )
-)
-
-darkButton = defaultButton.update(
-    **dict(
-        backgroundColor="#424242",
-        hoverColor="#212121",
-    )
-)
-
-noButton = defaultButton.update(
+ghostButton = defaultButton.update(
     **dict(
         backgroundColor="transparent",
-        hoverColor="#E5E5E5",
-        color="#333333",
+        hoverColor="#272729",
+        color="#FFFFFF",
     )
 )
 
-transparentButton = defaultButton.update(
+linkButton = defaultButton.update(
     **dict(
         backgroundColor="transparent",
         hoverColor="transparent",
-        color="#333333",
+        color="#FFFFFF",
+        hoverTextDecoration="underline",
     )
 )
+
+
+def pill(style: Style) -> Style:
+    """
+    Wrap any variant Style to get shadcn's `rounded-full` pill shape.
+    Usage: Button(text="Save", style=pill(defaultButton))
+    """
+    return style.update(radius=UI.dp(20))
