@@ -77,12 +77,7 @@ secondaryButton = defaultButton.update(
 )
 
 outlineButton = defaultButton.update(
-    **dict(
-        backgroundColor="#121111",
-        hoverColor="#252424",
-        color="#FFFFFF",
-        border="1px solid #545454"
-    )
+    **dict(backgroundColor="#121111", hoverColor="#252424", color="#FFFFFF", border="1px solid #545454")
 )
 
 ghostButton = defaultButton.update(

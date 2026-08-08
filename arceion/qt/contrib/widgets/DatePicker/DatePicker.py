@@ -1,3 +1,9 @@
+"""Button-based date picker widget with an attached calendar popup.
+
+This module provides a compact date selector that opens a popup calendar when
+pressed and is intended for use when typed input is not required.
+"""
+
 from collections.abc import Callable
 
 from PyQt6.QtCore import QDate, QPoint, Qt
@@ -7,8 +13,8 @@ from arceion.qt.contrib.styles.Button import outlineButton
 from arceion.qt.contrib.styles.DatePicker import defaultDatePicker
 from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.contrib.widgets.Button import Button
-from arceion.qt.contrib.widgets.CalendarGrid import CalendarGrid
-from arceion.qt.util import Style, UI
+from arceion.qt.contrib.widgets.DatePicker.CalendarGrid import CalendarGrid
+from arceion.qt.util import UI, Style
 
 __all__ = ["DatePicker"]
 
@@ -42,6 +48,7 @@ class DatePicker(QFrame):
         direction: Qt.LayoutDirection = Qt.LayoutDirection.LeftToRight,
         onDateChanged: Callable[[QDate], None] | None = None,
     ):
+        """Initialize the date picker and build its popup calendar UI."""
         super().__init__()
 
         self._date = date
@@ -61,6 +68,7 @@ class DatePicker(QFrame):
             self.onDateChanged(onDateChanged)
 
     def _buildUi(self) -> None:
+        """Build the picker button and popup calendar container."""
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
@@ -73,7 +81,7 @@ class DatePicker(QFrame):
         # outline variant already gives us the bordered box — no need for a
         # separate DatePickerTrigger QSS rule or a wrapping QFrame.
         self._button = Button(
-            text="\U0001F5D3  " + self._placeholder,
+            text="\U0001f5d3  " + self._placeholder,
             tooltip=self._tooltip or "Open calendar",
             style=outlineButton,
             onClick=self._togglePopup,
@@ -103,6 +111,7 @@ class DatePicker(QFrame):
             )
 
     def _applyInitialDate(self) -> None:
+        """Apply the initial selected date or show the current month."""
         if self._date is not None:
             self._calendar.setSelectedDate(self._date)
             self._updateDisplay()
@@ -113,12 +122,14 @@ class DatePicker(QFrame):
             self._calendar.setViewDate(QDate.currentDate())
 
     def _updateDisplay(self) -> None:
+        """Refresh the visible button label from the current date state."""
         if self._date is not None:
-            self._button.setText("\U0001F5D3  " + self._date.toString(self._dateFormat))
+            self._button.setText("\U0001f5d3  " + self._date.toString(self._dateFormat))
         else:
-            self._button.setText("\U0001F5D3  " + self._placeholder)
+            self._button.setText("\U0001f5d3  " + self._placeholder)
 
     def _onDateSelected(self, date: QDate) -> None:
+        """Handle a date selection from the popup calendar."""
         if self._date is not None and date == self._date:
             self.clearDate()
             self._popup.hide()
@@ -128,6 +139,7 @@ class DatePicker(QFrame):
         self._popup.hide()
 
     def _togglePopup(self) -> None:
+        """Show or hide the popup calendar for the picker."""
         if self._popup.isVisible():
             self._popup.hide()
             return
@@ -140,6 +152,7 @@ class DatePicker(QFrame):
         self._calendar.setFocus()
 
     def _setDate(self, date: QDate, notify: bool = False) -> None:
+        """Update the stored date and refresh the picker display."""
         self._date = date
         self._calendar.setSelectedDate(date)
         self._updateDisplay()
@@ -147,15 +160,19 @@ class DatePicker(QFrame):
             self._onDateChangedCallback(date)
 
     def setDate(self, date: QDate) -> None:
+        """Set the selected date and notify any registered callback."""
         self._setDate(date, notify=True)
 
     def clearDate(self) -> None:
+        """Clear the selected date and reset the calendar view."""
         self._date = None
         self._updateDisplay()
         self._calendar.setViewDate(QDate.currentDate())
 
     def selectedDate(self) -> QDate | None:
+        """Return the currently selected date, if any."""
         return self._date
 
     def onDateChanged(self, action: Callable[[QDate], None]) -> None:
+        """Register a callback to be invoked when the selected date changes."""
         self._onDateChangedCallback = action

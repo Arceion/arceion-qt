@@ -1,3 +1,9 @@
+"""Date input widget with inline typing and a calendar popup trigger.
+
+The component combines a text field with a popover-style calendar button so
+users can either type a date directly or choose one from a popup picker.
+"""
+
 from collections.abc import Callable
 
 from PyQt6.QtCore import QDate, QPoint, Qt
@@ -8,8 +14,8 @@ from arceion.qt.contrib.styles.Button import ghostButton
 from arceion.qt.contrib.styles.DateInput import defaultDateInput
 from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.contrib.widgets.Button import Button
-from arceion.qt.contrib.widgets.CalendarGrid import CalendarGrid
-from arceion.qt.util import Style, UI
+from arceion.qt.contrib.widgets.DatePicker.CalendarGrid import CalendarGrid
+from arceion.qt.util import UI, Style
 
 __all__ = ["DateInput"]
 
@@ -134,7 +140,7 @@ class DateInput(QFrame):
         )
         # Sized to fit the inset space (container height minus the top+bottom
         # border insets above), not the full container height.
-        self._button.setFixedSize(UI.dp(self._height) - 4* _borderWidth, UI.dp(self._height) - 4* _borderWidth)
+        self._button.setFixedSize(UI.dp(self._height) - 4 * _borderWidth, UI.dp(self._height) - 4 * _borderWidth)
 
         # ghostButton's border-radius (see Button.py) is uniform on all
         # four corners, but this button sits flush against the right edge

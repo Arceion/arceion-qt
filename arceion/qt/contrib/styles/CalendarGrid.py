@@ -1,3 +1,5 @@
+"""Default style tokens for the calendar grid widget."""
+
 from arceion.qt.util import UI, Style
 
 __all__ = ["defaultCalendarGrid"]
@@ -127,24 +129,24 @@ QPushButton#CalendarNavButton:hover [
 ]
 """,
     **dict(
-        color="#FAFAFA",           # foreground
-        weekdayColor="#A1A1AA",    # muted-foreground
+        color="#FAFAFA",  # foreground
+        weekdayColor="#A1A1AA",  # muted-foreground
         monthLabelSize=UI.dp(14),
         weekdayLabelSize=UI.dp(12),
         dayCellRadius=UI.dp(18),
         dayCellFontSize=UI.dp(13),
-        hoverColor="#27272A",      # accent
-        outsideColor="#52525B",    # dimmer muted text for prev/next month days
-        todayBorderColor="#3F3F46",# ring, subtle outline only
-        selectedColor="#FAFAFA",   # primary (dark mode: inverted to light/silver)
-        selectedTextColor="#18181B", # primary-foreground
+        hoverColor="#27272A",  # accent
+        outsideColor="#52525B",  # dimmer muted text for prev/next month days
+        todayBorderColor="#3F3F46",  # ring, subtle outline only
+        selectedColor="#FAFAFA",  # primary (dark mode: inverted to light/silver)
+        selectedTextColor="#18181B",  # primary-foreground
         selectedHoverColor="#E4E4E7",
-        rangeEdgeColor="#FAFAFA",     # same as selectedColor — range endpoints look identical to a single selection
+        rangeEdgeColor="#FAFAFA",  # same as selectedColor — range endpoints look identical to a single selection
         rangeEdgeTextColor="#18181B",
-        rangeMiddleColor="#27272A",   # accent — persistent, not just on hover, unlike DayCell's hoverColor
+        rangeMiddleColor="#27272A",  # accent — persistent, not just on hover, unlike DayCell's hoverColor
         rangeMiddleHoverColor="#3F3F46",
         disabledColor="#3F3F46",
-        buttonColor="#A1A1AA",     # muted-foreground
+        buttonColor="#A1A1AA",  # muted-foreground
         buttonRadius=UI.dp(6),
     ),
 )

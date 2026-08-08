@@ -1,3 +1,5 @@
+"""Default style tokens for the date picker and related popup widgets."""
+
 from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.util import UI, Style
 
@@ -88,7 +90,7 @@ QPushButton#DatePickerTrigger:focus [
         selectedColor="#FAFAFA",
         selectedTextColor="#171717",
         hoverColor="#27272A",
-        buttonColor="#A1A1AA" ,
+        buttonColor="#A1A1AA",
         buttonPadding=Padding(UI.dp(4), UI.dp(6)).qss,
         buttonRadius=UI.dp(6),
         focusColor="#2563EB",
