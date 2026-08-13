@@ -14,7 +14,9 @@ test:
 .PHONY: cf
 cf:
 	uv  run ruff format --check arceion/
+	uv  run ruff format --check test/
 
 .PHONY: format
 format:
-	uv  run ruff format arceion/
+	uv run ruff format arceion/
+	uv run ruff format test/

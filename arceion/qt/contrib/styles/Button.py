@@ -1,4 +1,4 @@
-from arceion.qt.contrib.enums import BorderStyle
+from arceion.qt.contrib.enums import BorderStyle, FontWeight
 from arceion.qt.contrib.widgets.Attr import Border, Margin, Padding
 from arceion.qt.util import UI, Style
 
@@ -9,7 +9,6 @@ __all__ = [
     "secondaryButton",
     "ghostButton",
     "linkButton",
-    "pill",
 ]
 
 
@@ -23,7 +22,7 @@ QToolButton [
 	font-size: {fontSize}px;
 	font-weight: {fontWeight};
 	margin: {margin};
-	border-radius: {radius}px;
+	border-radius: {borderRadius}px;
 	padding: {padding};
 	text-align: {textAlign};
 	text-decoration: {textDecoration};
@@ -31,6 +30,7 @@ QToolButton [
 QToolButton:hover [
 	background-color: {hoverColor};
 	text-decoration: {hoverTextDecoration};
+	border: {hoverBorder};
 ]
 QToolButton:disabled [
 	background-color: {disabledColor};
@@ -42,16 +42,17 @@ QToolButton::icon [
 """,
     **dict(
         fontSize=UI.sp(14),
-        fontWeight="500",
+        fontWeight=FontWeight.Medium,
         fontFamily="'Inter'",
         margin=Margin(0).qss,
         iconMargin=Margin(0).qss,
-        radius=UI.dp(6),
-        padding=Padding(UI.dp(8)).qss,
+        borderRadius=UI.dp(10),
+        padding=Padding(UI.dp(8), UI.dp(4)).qss,
         textAlign="center",
         textDecoration="none",
         hoverTextDecoration="none",
         border=Border(BorderStyle.NONE).qss,
+        hoverBorder=Border(BorderStyle.NONE).qss,
         backgroundColor="#18181B",
         hoverColor="#27272A",
         color="#FAFAFA",
@@ -60,30 +61,29 @@ QToolButton::icon [
     ),
 )
 
-destructiveButton = defaultButton.update(
-    **dict(
-        backgroundColor="#EF4444",
-        hoverColor="#DC2626",
-        color="#FAFAFA",
-    )
-)
+destructiveButton = defaultButton.update(**dict(backgroundColor="#ff6467", hoverColor="#26ff6467", color="#FF6467"))
 
 secondaryButton = defaultButton.update(
     **dict(
-        backgroundColor="#F4F4F5",
-        hoverColor="#E4E4E7",
-        color="#18181B",
+        backgroundColor="#F5F5F5",
+        hoverColor="#E5E5E5",
     )
 )
 
 outlineButton = defaultButton.update(
-    **dict(backgroundColor="#121111", hoverColor="#252424", color="#FFFFFF", border="1px solid #545454")
+    **dict(
+        backgroundColor="#0BFFFFFF",
+        border=Border("#26FFFFFF", BorderStyle.SOLID, 1).qss,
+        hoverColor="#26FFFFFF",
+        hoverBorder=Border("#26FFFFFF", BorderStyle.SOLID, 1).qss,
+        color="#FFFFFF",
+    )
 )
 
 ghostButton = defaultButton.update(
     **dict(
         backgroundColor="transparent",
-        hoverColor="#272729",
+        hoverColor="#26FFFFFF",
         color="#FFFFFF",
     )
 )
@@ -96,11 +96,3 @@ linkButton = defaultButton.update(
         hoverTextDecoration="underline",
     )
 )
-
-
-def pill(style: Style) -> Style:
-    """
-    Wrap any variant Style to get shadcn's `rounded-full` pill shape.
-    Usage: Button(text="Save", style=pill(defaultButton))
-    """
-    return style.update(radius=UI.dp(20))
