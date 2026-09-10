@@ -13,13 +13,13 @@ from arceion.qt.res import Icons
 from arceion.qt.util import UI
 
 from .AppTheme import AppTheme, Theme
-from .components import ButtonView
+from .components import ButtonView, TableView
 
 __all__ = ["SideBar"]
 
 
 class SideBar(ScrollableFrame):
-    components: dict = {"Button": ButtonView}
+    components: dict = {"Button": ButtonView, "Table": TableView}
 
     @staticmethod
     def getThemeIcon() -> QIcon:
