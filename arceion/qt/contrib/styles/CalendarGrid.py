@@ -1,3 +1,5 @@
+"""Default style tokens for the calendar grid widget."""
+
 from arceion.qt.util import UI, Style
 
 __all__ = ["defaultCalendarGrid"]

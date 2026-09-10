@@ -1,3 +1,5 @@
+"""Default style tokens for the date input widget."""
+
 from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.util import UI, Style
 

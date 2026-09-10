@@ -1,3 +1,9 @@
+"""Date range picker widget for selecting a start and end date.
+
+The picker uses a single trigger button and a popup calendar to collect a
+range in a simple, compact interaction flow.
+"""
+
 from collections.abc import Callable
 
 from PyQt6.QtCore import QDate, QPoint, Qt
@@ -6,7 +12,7 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 from arceion.qt.contrib.styles.DatePicker import defaultDatePicker
 from arceion.qt.contrib.widgets.Attr import Padding
 from arceion.qt.contrib.widgets.Button import Button
-from arceion.qt.contrib.widgets.CalendarGrid import CalendarGrid
+from arceion.qt.contrib.widgets.DatePicker.CalendarGrid import CalendarGrid
 from arceion.qt.util import UI, Style
 
 __all__ = ["DateRangePicker"]

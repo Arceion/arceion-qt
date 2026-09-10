@@ -1,3 +1,10 @@
+"""Calendar grid widget for selecting a single date or a date range.
+
+This module provides a fully stylable calendar component built from Qt
+widgets rather than the stock QCalendarWidget so the visuals can be themed
+through Qt stylesheets in a way that matches the rest of the component set.
+"""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -65,6 +72,7 @@ class CalendarGrid(QWidget):
         style: str | Style = defaultCalendarGrid,
         parent: QWidget | None = None,
     ):
+        """Initialize the calendar grid and build its month view."""
         super().__init__(parent)
 
         self._selectionMode = selectionMode
