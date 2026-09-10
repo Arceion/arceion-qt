@@ -4,8 +4,9 @@ from PyQt6.QtWidgets import QSizePolicy
 from arceion.qt.contrib.styles.Card import defaultScrollArea
 from arceion.qt.contrib.styles.Frame import defaultFrame
 from arceion.qt.contrib.widgets.Attr import Margin
-from .ScrollArea import ScrollArea
 from arceion.qt.contrib.widgets.Frame import VBoxFrame
+
+from .ScrollArea import ScrollArea
 
 __all__ = ["ScrollableFrame"]
 
